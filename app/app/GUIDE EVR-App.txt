@@ -1,0 +1,13 @@
+1. install python
+
+2. check if pip is installed
+
+3. run command in cmd(command prompt):
+pip install customtkinter pyserial==3.3 numpy tabulate Pillow
+
+sau 
+py -m pip install customtkinter pyserial==3.3 numpy tabulate Pillow
+
+4. .exe file in the app/dist/main/main.exe
+
+5. enjoy!
