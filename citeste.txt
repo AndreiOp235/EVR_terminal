@@ -1,0 +1,11 @@
+Se seteaza temperatura patului cu comanda
+M190 Sx unde x este o temperatura
+se asteapta 2 min
+in excel se completeaza cu temperatura maxima de pe camera
+temperatura de pe multimetru
+in fisierul salvareCSV.py se modifica portul ca sa fie ca cel din device manager
+se lanseaza din terminal
+py salvareCSV.py x
+unde x este acea temperatura
+daca apare bifa la 100/100, CTRL C  si x++
+else repeat py salvareCSV.py x
