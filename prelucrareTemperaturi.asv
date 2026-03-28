@@ -1,0 +1,77 @@
+load('temperaturi.mat');
+
+% Funcția care elimină maxim 12 outliers dintr-un vector
+eliminaOutliers = @(v) eliminaMax12Outliers(v);
+
+% Aplicăm funcția pentru fiecare set de 100 de iteratii
+temperaturi = cellfun(@(cellIteratii) ...
+    cellfun(eliminaOutliers, cellIteratii, 'UniformOutput', false), ...
+    temperaturi, 'UniformOutput', false);
+
+
+%% calculam o medie noua per temperatura
+iter=zeros(100,1);
+mediiTemp=zeros(81,1);
+for temperatura=1:81
+    for iteratie=1:100
+        iter(iteratie)=mean(mean(temperaturi{temperatura}{iteratie},'omitnan'));
+    end
+    mediiTemp(temperatura)=mean(iter);
+end
+
+mediiTemp
+%% date masurate
+x = 30:1:110;
+plot(x, mediiTemp, 'b', 'LineWidth', 2);
+hold on;
+
+% parametri
+R0 = 10000;
+T0 = 25 + 273.15;
+B  = 3950;
+Rfix = 10000;
+
+Vcc = 3.3;     % sau 5.0
+Vd  = 0.7;     % cadere dioda
+
+%% calcul
+T = x + 273.15;
+Rntc = R0 .* exp(B .* (1./T - 1./T0));
+
+ADC_ideal = 4095 .* (Rntc ./ (Rfix + Rntc)) .* ((Vcc - Vd)/Vcc);
+
+%% plot
+plot(x, ADC_ideal, 'r--', 'LineWidth', 2);
+
+title('ADC masurat vs ideal (cu dioda)');
+xlabel('Temperatura (°C)');
+ylabel('ADC');
+legend('Masurat', 'Ideal');
+grid on;%% date masurate
+x = 30:1:110;
+plot(x, mediiTemp, 'b', 'LineWidth', 2);
+hold on;
+
+%% parametri
+R0 = 10000;
+T0 = 25 + 273.15;
+B  = 3950;
+Rfix = 10000;
+
+Vcc = 3.3;     % sau 5.0
+Vd  = 0.7;     % cadere dioda
+
+%% calcul
+T = x + 273.15;
+Rntc = R0 .* exp(B .* (1./T - 1./T0));
+
+ADC_ideal = 4095 .* (Rntc ./ (Rfix + Rntc)) .* ((Vcc - Vd)/Vcc);
+
+%% plot
+plot(x, ADC_ideal, 'r--', 'LineWidth', 2);
+
+title('ADC masurat vs ideal (cu dioda)');
+xlabel('Temperatura (°C)');
+ylabel('ADC');
+legend('Masurat', 'Ideal');
+grid on;

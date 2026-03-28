@@ -1,0 +1,67 @@
+clear
+clc
+load("dateMatlab.mat")
+
+acumulator=zeros(100,1);
+
+matrice = table2array(dataMare);
+matriceString = matrice(1:16, 2:9);
+iter = str2double(matriceString);
+
+%h = heatmap(iter);       % Crează heatmap-ul și salvează handle-ul
+%h.ColorLimits = [0 4096]; % Setează axa de culori de la 0 la 4096
+
+%% aici plotez 1 termistor
+for iteratie=1:100
+    matriceString = matrice((iteratie*16+1-16):(iteratie*16), 2:9);
+    iter = str2double(matriceString);
+    acumulator(iteratie) = iter(1,1); 
+end
+
+boxplot(acumulator);
+title("boxPlot 1termistor")
+
+%% aici plotam 1 iteratie
+valori=zeros(128,1);
+for i=1:16
+    for j=1:8
+        valori(i*16+j)=iter(i,j);
+    end
+end
+
+boxplot(iter)
+title("box plot 1 iteratie")
+
+%% elimin valorile outliers (scurturile)
+
+for iteratie=1:100
+    matriceString = matrice((iteratie*16+1-16):(iteratie*16), 2:9);
+    iter = str2double(matriceString);
+    iter(iter < 600 | iter > 3000) = 0;
+end
+
+acumulatorFiltrat = iter(iter ~= 0);
+
+boxplot(acumulatorFiltrat);
+title('Distribuția valorilor valide');
+ylabel('Valori');
+xlabel('Set de date');
+
+%% salvez toate temperaturile
+
+temperaturi = cell(81,1);
+
+for temperatura = 0:80
+    idioti=cell(100,1);
+    for iteratie=1:100
+        matriceString = matrice((iteratie*16+1-16+temperatura*100*16):(iteratie*16+temperatura*100*16), 2:9);
+        iter = str2double(matriceString);
+        iter(iter < 600 | iter > 3000) = 0;
+        idioti{iteratie}=iter;
+    end
+    
+    temperaturi{temperatura+1}=idioti;
+end
+
+%%
+load "temperaturi.mat"
