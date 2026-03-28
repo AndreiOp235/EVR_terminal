@@ -54,6 +54,5 @@ title('Conversie ADC -> Temperatura (cu cautare)');
 grid on;
 
 %salvare x 100
-temp_round = round(temp*100, 0);
 T = table(ADC(:), temp_round(:), 'VariableNames', {'ADC','Temperatura'});
 writetable(T, 'adc_temp.csv');
