@@ -7,6 +7,7 @@ array_name = "temp_lut"
 
 scale = 1   # pentru 2 zecimale (ex: 25.34 -> 2534)
 ctype = "uint16_t"  # tipul in C
+offset = 0  # daca vrei sa adaugi un offset (ex: -40 pentru a avea 0 la -40C)
 
 # --- Citire CSV ---
 adc_values = []
@@ -22,7 +23,7 @@ with open(input_csv, newline='') as csvfile:
         temp = float(row[1])
         
         adc_values.append(adc)
-        temp_values.append(int(round(temp * scale)))
+        temp_values.append(int(round((temp + offset) * scale)))
 
 # --- Generare header ---
 with open(output_header, "w") as f:
